@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Task = require('../models/task');
 
+
+
 router.post('/tasks', async (req, res) => {
   try {
     const { description, fromTime, toTime } = req.body;
@@ -72,10 +74,12 @@ router.get('/summary/:day', async (req, res) => {
     });
     const totalDuration = tasks.reduce((acc, task) => acc + task.duration, 0);
     const remainingHours = 8 - totalDuration;
+    const numOfTasks = tasks.length;
 
     res.send({
       totalDuration,
       remainingHours,
+      numOfTasks,
     });
   } catch (error) {
     res.status(500).send(error);
