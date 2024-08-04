@@ -3,5 +3,5 @@ const express = require("express");
 
 module.exports = function (app) {
   app.use(express.json());
-  // app.use("/tasks", tasksRouters);
+  app.use("/", tasksRouters);
 };

@@ -5,6 +5,7 @@ const Task = require('../models/task');
 
 
 router.post('/tasks', async (req, res) => {
+
   try {
     const { description, fromTime, toTime } = req.body;
     const task = new Task({ description, fromTime, toTime });
@@ -16,6 +17,7 @@ router.post('/tasks', async (req, res) => {
 });
 
 router.get('/tasks', async (req, res) => {
+    console.log("getting")
   try {
     const tasks = await Task.find({});
     res.send(tasks);
