@@ -12,14 +12,22 @@ router.post('/tasks', async (req, res) => {
     await task.save();
     res.status(201).send(task);
   } catch (error) {
+    console.log(error)
     res.status(400).send({ error: error.message });
   }
 });
-
 router.get('/tasks', async (req, res) => {
-    console.log("getting")
   try {
-    const tasks = await Task.find({});
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const tasks = await Task.find({
+      fromTime: { $gte: startOfDay, $lte: endOfDay },
+    });
+
     res.send(tasks);
   } catch (error) {
     res.status(500).send(error);
