@@ -8,7 +8,7 @@ router.post('/tasks', async (req, res) => {
 
   try {
     const { description, fromTime, toTime } = req.body;
-    const task = new Task({ description, fromTime, toTime });
+    const task = new Task({ description, fromTime: new Date( fromTime), toTime: new Date(toTime) });
     await task.save();
     res.status(201).send(task);
   } catch (error) {
