@@ -31,6 +31,7 @@ taskSchema.virtual('day').get(function() {
 
 taskSchema.pre('save', async function(next) {
   const task = this;
+  const isUpdating = !task.isNew
   const duration = task.duration;
   
   if (duration > 8) {
@@ -44,8 +45,16 @@ taskSchema.pre('save', async function(next) {
   const tasksForDay = await mongoose.model('Task').find({
     fromTime: { $gte: startOfDay, $lte: endOfDay },
   });
-  const totalDuration = tasksForDay.reduce((acc, t) => acc + t.duration, 0);
+  let totalDuration = tasksForDay.reduce((acc, t) => acc + t.duration, 0);
 
+
+  if(isUpdating) {
+    const originalTask = await mongoose.model('Task').findById(task._id);
+    if (originalTask) {
+      totalDuration -= originalTask.duration;
+    }
+
+  }
   if (totalDuration + duration > 8) {
     return next(new Error('Total task duration for the day cannot exceed 8 hours.'));
   }
