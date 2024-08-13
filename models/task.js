@@ -23,6 +23,11 @@ taskSchema.virtual('duration').get(function() {
   return (this.toTime - this.fromTime) / (1000 * 60 * 60);
 });
 
+taskSchema.virtual('day').get(function() {
+  const fromDate = new Date(this.fromTime);
+  fromDate.setHours(0, 0, 0, 0);
+  return fromDate;
+});
 
 taskSchema.pre('save', async function(next) {
   const task = this;
